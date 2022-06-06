@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'user',
     'article',
-    'bank'
+    'bank',
+    'money_cell'
 ]
 
 MIDDLEWARE = [
