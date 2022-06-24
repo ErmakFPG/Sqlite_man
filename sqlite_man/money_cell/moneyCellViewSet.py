@@ -2,7 +2,6 @@ import json
 from django.http import JsonResponse
 from django.db import IntegrityError
 from .models import MoneyCell
-from user.models import User
 from django.forms.models import model_to_dict
 from rest_framework import viewsets
 
