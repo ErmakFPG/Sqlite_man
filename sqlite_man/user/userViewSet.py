@@ -1,6 +1,5 @@
 import json
 from django.http import JsonResponse
-from django.http import HttpResponseNotFound
 from .models import User
 from django.forms.models import model_to_dict
 from rest_framework import viewsets
@@ -14,7 +13,10 @@ class UserViewSet(viewsets.ViewSet):
         return JsonResponse(model_to_dict(user))
 
     def get(self, request, id):
-        return JsonResponse(model_to_dict(User.objects.get(id=id)))
+        try:
+            return JsonResponse(model_to_dict(User.objects.get(id=id)))
+        except User.DoesNotExist:
+            return JsonResponse({'error': 'User not found'}, status=404)
 
     def get_all(self, request):
         return JsonResponse([model_to_dict(x) for x in User.objects.all()], safe=False)
@@ -27,7 +29,7 @@ class UserViewSet(viewsets.ViewSet):
             user.save()
             return JsonResponse(model_to_dict(user))
         except User.DoesNotExist:
-            return HttpResponseNotFound("<h2>User not found</h2>")
+            return JsonResponse({'error': 'User not found'}, status=404)
 
     def delete(self, request, id):
         try:
@@ -35,4 +37,4 @@ class UserViewSet(viewsets.ViewSet):
             user.delete()
             return JsonResponse(model_to_dict(user))
         except User.DoesNotExist:
-            return HttpResponseNotFound("<h2>User not found</h2>")
+            return JsonResponse({'error': 'User not found'}, status=404)

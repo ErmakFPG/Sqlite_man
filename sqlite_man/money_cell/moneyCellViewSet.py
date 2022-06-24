@@ -1,6 +1,5 @@
 import json
 from django.http import JsonResponse
-from django.http import HttpResponseNotFound
 from django.db import IntegrityError
 from .models import MoneyCell
 from django.forms.models import model_to_dict
@@ -16,10 +15,13 @@ class MoneyCellViewSet(viewsets.ViewSet):
             money_cell.save()
             return JsonResponse(model_to_dict(money_cell))
         except IntegrityError:
-            return HttpResponseNotFound("<h2>Owner not found</h2>")
+            return JsonResponse({'error': 'Owner not found'}, status=404)
 
     def get(self, request, id):
-        return JsonResponse(model_to_dict(MoneyCell.objects.get(id=id)))
+        try:
+            return JsonResponse(model_to_dict(MoneyCell.objects.get(id=id)))
+        except MoneyCell.DoesNotExist:
+            return JsonResponse({'error': 'User not found'}, status=404)
 
     def get_all(self, request):
         return JsonResponse([model_to_dict(x) for x in MoneyCell.objects.all()], safe=False)
@@ -32,7 +34,7 @@ class MoneyCellViewSet(viewsets.ViewSet):
             money_cell.save()
             return JsonResponse(model_to_dict(money_cell))
         except MoneyCell.DoesNotExist:
-            return HttpResponseNotFound("<h2>MoneyCell not found</h2>")
+            return JsonResponse({'error': 'User not found'}, status=404)
 
     def delete(self, request, id):
         try:
@@ -40,4 +42,4 @@ class MoneyCellViewSet(viewsets.ViewSet):
             money_cell.delete()
             return JsonResponse(model_to_dict(money_cell))
         except MoneyCell.DoesNotExist:
-            return HttpResponseNotFound("<h2>MoneyCell not found</h2>")
+            return JsonResponse({'error': 'User not found'}, status=404)
