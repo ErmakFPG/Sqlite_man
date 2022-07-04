@@ -2,6 +2,7 @@ from django.urls import path
 from django.urls import re_path
 from user.userViewSet import UserViewSet
 from money_cell.moneyCellViewSet import MoneyCellViewSet
+from mapping.mappingViewSet import MappingViewSet
 
 
 urlpatterns = [
@@ -14,5 +15,10 @@ urlpatterns = [
                                                   'post': 'create'})),
     re_path('^money_cell/(?P<id>\d+)$', MoneyCellViewSet.as_view({'get': 'get',
                                                                   'put': 'edit',
-                                                                  'delete': 'delete'}))
+                                                                  'delete': 'delete'})),
+    path('mapping/', MappingViewSet.as_view({'get': 'get_all',
+                                             'post': 'create'})),
+    re_path('^mapping/(?P<id>\d+)$', MappingViewSet.as_view({'get': 'get',
+                                                             'put': 'edit',
+                                                             'delete': 'delete'}))
 ]
