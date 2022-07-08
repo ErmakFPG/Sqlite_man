@@ -18,7 +18,8 @@ urlpatterns = [
                                                                   'delete': 'delete'})),
     path('mapping/', MappingViewSet.as_view({'get': 'get_all',
                                              'post': 'create'})),
-    re_path('^mapping/(?P<id>\d+)$', MappingViewSet.as_view({'get': 'get',
-                                                             'put': 'edit',
-                                                             'delete': 'delete'}))
+    re_path('^mapping/(?P<name>.+)/(?P<key>.+)$', MappingViewSet.as_view({'get': 'get',
+                                                                          'delete': 'delete',
+                                                                          'put': 'edit'})),
+    re_path('mapping/(?P<name>.+)$', MappingViewSet.as_view({'get': 'get_map'}))
 ]
